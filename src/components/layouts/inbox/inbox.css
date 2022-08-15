@@ -1,0 +1,16 @@
+.inbox-item {
+  width: 100%;
+}
+
+.inbox-link {
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+  margin: 5px;
+  border-radius: 10px;
+}
+
+.time {
+  color: rgb(117, 117, 117);
+  font-size: x-small;
+}

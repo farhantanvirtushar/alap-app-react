@@ -1,4 +1,4 @@
-export interface ChatHistory {
+export interface InboxItem {
   last_message_time: string;
   contact_id: number;
   first_name: string;

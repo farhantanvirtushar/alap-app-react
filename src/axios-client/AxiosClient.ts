@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig, AxiosRequestHeaders } from "axios";
 
 const axiosClient = axios.create();
 
@@ -7,8 +7,16 @@ axiosClient.defaults.baseURL = process.env.REACT_APP_BACKEND_API;
 axiosClient.defaults.headers.common = {
   "Content-Type": "application/json",
   Accept: "application/json",
+  Authorization: "",
 };
 
+axiosClient.interceptors.request.use((config: AxiosRequestConfig<any>) => {
+  const token: string | null = localStorage.getItem("token");
+  var headers: AxiosRequestHeaders = config.headers!;
+  headers["Authorization"] = "Bearer " + token;
+  config.headers = headers;
+  return config;
+});
 //All request will wait 2 seconds before timeout
 // axiosClient.defaults.timeout = 2000;
 
