@@ -84,16 +84,14 @@ export default function AppLayout() {
           open && !mobileScreen ? "main-content-shrink" : "main-content"
         }
       >
-        <div className="topbar">
-          <IconButton
-            aria-label="menu"
-            className="menu-button"
-            onClick={toggleDrawer}
-          >
-            <MenuIcon />
-          </IconButton>
-          <div className="topbar-group"></div>
-        </div>
+        <IconButton
+          aria-label="menu"
+          className="menu-button"
+          onClick={toggleDrawer}
+        >
+          <MenuIcon />
+        </IconButton>
+
         <Outlet />
       </div>
     </div>

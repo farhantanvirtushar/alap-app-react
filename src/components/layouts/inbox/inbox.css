@@ -10,7 +10,15 @@
   border-radius: 10px;
 }
 
+.inbox-item .active {
+  background-color: #e4e6eb;
+}
+
 .time {
-  color: rgb(117, 117, 117);
+  color: rgb(92, 92, 92);
   font-size: x-small;
+}
+
+.avatar {
+  border: 1px solid rgb(196, 196, 196);
 }

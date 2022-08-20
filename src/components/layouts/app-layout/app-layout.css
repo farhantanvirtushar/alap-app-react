@@ -1,21 +1,5 @@
 :root {
-  --side-nav-width: 230px;
-}
-
-.topbar {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 10px;
-  margin: 10px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  border-radius: 15px;
-}
-
-.topbar-group {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  --side-nav-width: 300px;
 }
 
 .side-bar {

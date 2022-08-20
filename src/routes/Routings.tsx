@@ -5,6 +5,7 @@ import { Navigate, useRoutes } from "react-router-dom";
 import isAuthenticated from "../auth-guard/AuthGuard";
 import AppLayout from "../components/layouts/app-layout/AppLayout";
 import Login from "../pages/login/Login";
+import Message from "../pages/message/Message";
 import Register from "../pages/register/Register";
 
 export default function Routings() {
@@ -21,10 +22,10 @@ export default function Routings() {
           path: "/home",
           element: <Home />,
         },
-        // {
-        //   path: "categories/:id",
-        //   element: <Products />,
-        // }
+        {
+          path: "/messages/:id",
+          element: <Message />,
+        },
       ],
     },
     {
