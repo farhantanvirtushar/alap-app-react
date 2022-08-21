@@ -1,3 +1,5 @@
+import { User } from "../models/User";
+
 export function stringToColor(string: string) {
   let hash = 0;
   let i;
@@ -32,4 +34,10 @@ export function formatTime(time_string: string): string {
   const date: Date = new Date(time_string);
 
   return date.toLocaleString();
+}
+
+export function getUserId():number {
+  const userString: string = localStorage.getItem("user")! ;
+  const user: User = JSON.parse(userString);
+  return user.user_id!;
 }
