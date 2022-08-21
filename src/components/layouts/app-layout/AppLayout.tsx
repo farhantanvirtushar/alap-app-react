@@ -79,19 +79,7 @@ export default function AppLayout() {
         </List>
         <Inbox />
       </Drawer>
-      <div
-        className={
-          open && !mobileScreen ? "main-content-shrink" : "main-content"
-        }
-      >
-        <IconButton
-          aria-label="menu"
-          className="menu-button"
-          onClick={toggleDrawer}
-        >
-          <MenuIcon />
-        </IconButton>
-
+      <div className={!mobileScreen ? "main-content-shrink" : "main-content"}>
         <Outlet />
       </div>
     </div>

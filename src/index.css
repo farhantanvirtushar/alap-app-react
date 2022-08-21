@@ -14,4 +14,5 @@ code {
 
 :root {
   --primary-color: #7367f0;
+  --side-nav-width: 300px;
 }

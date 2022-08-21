@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Avatar } from "@mui/material";
 import React from "react";
 import { MessageHeaderProps } from "../../../models/message/MessageHeaderProps";

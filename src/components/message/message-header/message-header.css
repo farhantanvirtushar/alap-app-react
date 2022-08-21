@@ -1,12 +1,15 @@
 .topbar {
+  position: fixed;
+  top: 0;
+  width: calc(100% - var(--side-nav-width) - 20px);
+  background-color: #fff;
   min-height: 40px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   padding: 10px;
-  margin: 10px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  border-radius: 15px;
+  z-index: 1;
 }
 
 .topbar-group {
