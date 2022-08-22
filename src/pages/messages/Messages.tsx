@@ -10,6 +10,7 @@ import MessageHeader from "../../components/message/message-header/MessageHeader
 import MessageSender from "../../components/message/message-sender/MessageSender";
 import MessageList from "../../components/message/message-list/MessageList";
 import { Message } from "../../models/message/Message";
+import { Socket } from "socket.io-client";
 
 const getContactInfoUrl = "/api/message/user/{id}";
 const getMessageListUrl = "/api/message/message-list/{id}";
@@ -27,23 +28,29 @@ const getMessageList = async (id: string, setmessageList: Function) => {
     getMessageListUrl.replace("{id}", id)
   );
   setmessageList(messageList);
-  console.log(messageList);
+  // console.log(messageList);
 };
 
-export default function Messages() {
+export default function Messages(props: { socket: Socket }) {
   const { id } = useParams();
-
+  const { socket } = props;
   const [contact, setcontact] = useState<User>();
   const [messageList, setmessageList] = useState<Message[]>([]);
 
   const sendMessage = async (message: Message) => {
-    var messageList: Message[] = await postRequest<Message[]>(
-      sendMessageUrl,
-      message
-    );
-    setmessageList(messageList);
-    console.log(messageList);
+    var updatedMessageList: Message[] = messageList.map((message) => message);
+    updatedMessageList.unshift(message);
+    setmessageList(updatedMessageList);
+
+    postRequest<Message[]>(sendMessageUrl, message);
   };
+
+  socket.on("new-message", (newMessage: Message) => {
+    var updatedMessageList: Message[] = messageList.map((message) => message);
+    updatedMessageList.unshift(newMessage);
+    setmessageList(updatedMessageList);
+    // console.log(newMessage);
+  });
 
   useEffect(() => {
     getContactInfo(id!, setcontact);

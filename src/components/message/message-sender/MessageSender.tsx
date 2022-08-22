@@ -6,17 +6,27 @@ import "./message-sender.css";
 import { MessageSenderProps } from "../../../models/message/MessageSenderProps";
 import { Message } from "../../../models/message/Message";
 import { text } from "stream/consumers";
+import { getUserId } from "../../../common/Utils";
 
 export default function MessageSender(props: MessageSenderProps) {
   const { sendMessage, receiver_id } = props;
   const [messageText, setmessageText] = useState("");
 
   const sendMessageToServer = () => {
-    var newMessage: Message = {
-      receiver_id: receiver_id,
-      text: messageText,
-    };
-    sendMessage(newMessage);
+    if (messageText != "") {
+      var newMessage: Message = {
+        sender_id: getUserId(),
+        receiver_id: receiver_id,
+        text: messageText,
+      };
+      sendMessage(newMessage);
+      setmessageText("");
+    }
+  };
+  const handleKeyPressed = (event: React.KeyboardEvent) => {
+    if (event.key == "Enter") {
+      sendMessageToServer();
+    }
   };
   return (
     <div className="bottom-bar">
@@ -27,8 +37,8 @@ export default function MessageSender(props: MessageSenderProps) {
         value={messageText}
         onChange={(event) => {
           setmessageText(event.target.value);
-          console.log(event.target.value);
         }}
+        onKeyDown={handleKeyPressed}
       />
       <IconButton
         color="primary"
