@@ -45,17 +45,25 @@ export default function Messages(props: { socket: Socket }) {
     postRequest<Message[]>(sendMessageUrl, message);
   };
 
-  socket.on("new-message", (newMessage: Message) => {
-    var updatedMessageList: Message[] = messageList.map((message) => message);
-    updatedMessageList.unshift(newMessage);
-    setmessageList(updatedMessageList);
-    // console.log(newMessage);
-  });
-
   useEffect(() => {
     getContactInfo(id!, setcontact);
     getMessageList(id!, setmessageList);
   }, [id]);
+
+  useEffect(() => {
+    socket.on("new-message", (newMessage: Message) => {
+      console.log("sender id = " + newMessage.sender_id);
+      console.log("contact id = " + id);
+      if (newMessage.sender_id == id) {
+        var updatedMessageList: Message[] = messageList.map(
+          (message) => message
+        );
+        updatedMessageList.unshift(newMessage);
+        setmessageList(updatedMessageList);
+      }
+      // console.log(newMessage);
+    });
+  }, [messageList, id]);
   return (
     <div>
       <MessageHeader contact={contact} />
