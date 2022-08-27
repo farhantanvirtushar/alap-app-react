@@ -11,6 +11,11 @@ import MessageSender from "../../components/message/message-sender/MessageSender
 import MessageList from "../../components/message/message-list/MessageList";
 import { Message } from "../../models/message/Message";
 import { Socket } from "socket.io-client";
+import { useDispatch, useStore } from "react-redux";
+import { StoreModel } from "../../models/redux/StoreModel";
+import { AnyAction } from "@reduxjs/toolkit";
+import { setInbox } from "../../redux/Reducer";
+import { InboxItem } from "../../models/message/InboxItem";
 
 const getContactInfoUrl = "/api/message/user/{id}";
 const getMessageListUrl = "/api/message/message-list/{id}";
@@ -31,11 +36,29 @@ const getMessageList = async (id: string, setmessageList: Function) => {
   // console.log(messageList);
 };
 
+const getSenderInfo = async (id: string) => {
+  const user: User = await getRequest<User>(
+    getContactInfoUrl.replace("{id}", id)
+  );
+  return user;
+};
+
+const compare = (a: InboxItem, b: InboxItem) => {
+  if (a.last_message_time > b.last_message_time) {
+    return -1;
+  }
+  if (a.last_message_time < b.last_message_time) {
+    return 1;
+  }
+  return 0;
+};
 export default function Messages(props: { socket: Socket }) {
   const { id } = useParams();
   const { socket } = props;
   const [contact, setcontact] = useState<User>();
   const [messageList, setmessageList] = useState<Message[]>([]);
+  const store = useStore<StoreModel, AnyAction>();
+  const dispatch = useDispatch();
 
   const sendMessage = async (message: Message) => {
     var updatedMessageList: Message[] = messageList.map((message) => message);
@@ -45,6 +68,37 @@ export default function Messages(props: { socket: Socket }) {
     postRequest<Message[]>(sendMessageUrl, message);
   };
 
+  const updateInbox = async (newMessage: Message) => {
+    let oldInboxItems: InboxItem[] = store
+      .getState()
+      .inboxItems.map((inboxItem) => {
+        return { ...inboxItem };
+      });
+    var inboxUpdated = false;
+    var newInboxItems = oldInboxItems.map((inboxItem) => {
+      if (newMessage.sender_id == inboxItem.contact_id) {
+        inboxItem.last_message_time = newMessage.created_at!;
+        inboxUpdated = true;
+      }
+
+      return inboxItem;
+    });
+    if (!inboxUpdated) {
+      const sender = await getSenderInfo(newMessage.sender_id!.toString());
+      var newInboxItem: InboxItem = {
+        last_message_time: newMessage.created_at!,
+        contact_id: newMessage.sender_id!,
+        first_name: sender.first_name,
+        last_name: sender.last_name,
+        profile_photo: sender.profile_photo!,
+      };
+      newInboxItems.push(newInboxItem);
+    }
+
+    newInboxItems.sort(compare);
+    dispatch(setInbox(newInboxItems));
+  };
+
   useEffect(() => {
     getContactInfo(id!, setcontact);
     getMessageList(id!, setmessageList);
@@ -52,8 +106,8 @@ export default function Messages(props: { socket: Socket }) {
 
   useEffect(() => {
     socket.on("new-message", (newMessage: Message) => {
-      console.log("sender id = " + newMessage.sender_id);
-      console.log("contact id = " + id);
+      // console.log("sender id = " + newMessage.sender_id);
+      // console.log("contact id = " + id);
       if (newMessage.sender_id == id) {
         var updatedMessageList: Message[] = messageList.map(
           (message) => message
@@ -61,8 +115,12 @@ export default function Messages(props: { socket: Socket }) {
         updatedMessageList.unshift(newMessage);
         setmessageList(updatedMessageList);
       }
+      updateInbox(newMessage);
       // console.log(newMessage);
     });
+    return () => {
+      socket.off("new-message");
+    };
   }, [messageList, id]);
   return (
     <div>

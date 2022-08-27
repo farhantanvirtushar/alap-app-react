@@ -18,7 +18,9 @@ import { NavItem } from "../../../models/NavItem";
 
 import "./app-layout.css";
 import Inbox from "../inbox/Inbox";
-export default function AppLayout() {
+import { Socket } from "socket.io-client";
+export default function AppLayout(props: { socket: Socket }) {
+  const { socket } = props;
   const [open, setopen] = useState(window.innerWidth > 600);
   const [mobileScreen, setmobileScreen] = useState(window.innerWidth < 600);
 
@@ -77,7 +79,7 @@ export default function AppLayout() {
             </ListItem>
           ))}
         </List>
-        <Inbox />
+        <Inbox socket={socket} />
       </Drawer>
       <div className={!mobileScreen ? "main-content-shrink" : "main-content"}>
         <Outlet />

@@ -8,27 +8,42 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
+import { AnyAction } from "@reduxjs/toolkit";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useStore } from "react-redux";
 import { NavLink } from "react-router-dom";
+import { Socket } from "socket.io-client";
 import { getRequest } from "../../../axios-client/AxiosClient";
 import { formatTime, stringAvatar } from "../../../common/Utils";
 import { InboxItem } from "../../../models/message/InboxItem";
+import { StoreModel } from "../../../models/redux/StoreModel";
+import { setInbox } from "../../../redux/Reducer";
 
 import "./inbox.css";
 
 const getInboxItemUrl = "/api/message/inbox";
 
-const getInboxItmes = async (setinboxItemList: Function) => {
-  var inboxItems: InboxItem[] = await getRequest<InboxItem[]>(getInboxItemUrl);
-  setinboxItemList(inboxItems);
-  console.log(inboxItems);
-};
-
-export default function Inbox() {
+export default function Inbox(props: { socket: Socket }) {
+  const { socket } = props;
   const [inboxItemList, setinboxItemList] = useState<InboxItem[]>([]);
+  const store = useStore<StoreModel, AnyAction>();
+  const dispatch = useDispatch();
+
+  const getInboxItmes = async (setinboxItemList: Function) => {
+    var inboxItems: InboxItem[] = await getRequest<InboxItem[]>(
+      getInboxItemUrl
+    );
+    // setinboxItemList(inboxItems);
+    dispatch(setInbox(inboxItems));
+    console.log(inboxItems);
+  };
 
   useEffect(() => {
     getInboxItmes(setinboxItemList);
+    store.subscribe(() => {
+      console.log(" inbox changed : ", store.getState().inboxItems);
+      setinboxItemList(store.getState().inboxItems);
+    });
   }, []);
   return (
     <div>

@@ -14,7 +14,11 @@ export default function Routings(props: { socket: Socket }) {
   const routes = useRoutes([
     {
       path: "/",
-      element: isAuthenticated() ? <AppLayout /> : <Navigate to="/login" />,
+      element: isAuthenticated() ? (
+        <AppLayout socket={socket} />
+      ) : (
+        <Navigate to="/login" />
+      ),
       children: [
         {
           path: "",
