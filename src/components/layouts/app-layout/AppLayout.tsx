@@ -4,6 +4,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import EmailIcon from "@mui/icons-material/Email";
 import {
+  Autocomplete,
   Drawer,
   IconButton,
   List,
@@ -11,6 +12,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  TextField,
 } from "@mui/material";
 import React, { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
@@ -19,10 +21,13 @@ import { NavItem } from "../../../models/NavItem";
 import "./app-layout.css";
 import Inbox from "../inbox/Inbox";
 import { Socket } from "socket.io-client";
+import { User } from "../../../models/User";
+import SearchUser from "./search-usaer/SearchUser";
 export default function AppLayout(props: { socket: Socket }) {
   const { socket } = props;
   const [open, setopen] = useState(window.innerWidth > 600);
   const [mobileScreen, setmobileScreen] = useState(window.innerWidth < 600);
+  const [matchedUsers, setmatchedUsers] = useState<User[]>();
 
   const sideNavItems: NavItem[] = [
     {
@@ -63,8 +68,10 @@ export default function AppLayout(props: { socket: Socket }) {
         anchor="left"
         open={open}
         onClick={closeDrawer}
+        className="app-drawer"
       >
         <div className="title">Alap</div>
+        <SearchUser />
         <List className="side-bar">
           {sideNavItems.map((navItem: NavItem, index) => (
             <ListItem key={navItem.name} disablePadding className="nav-item">
