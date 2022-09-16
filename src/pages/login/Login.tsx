@@ -3,7 +3,7 @@ import { Button, CircularProgress, TextField } from "@mui/material";
 import { AxiosError } from "axios";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { postRequest } from "../../axios-client/AxiosClient";
 import { AuthReq } from "../../models/auth/AuthReq";
 import { AuthRes } from "../../models/auth/AuthRes";
@@ -88,7 +88,13 @@ export default function Login() {
             </Button>
           )}
           <div className="text-row">Don't Have An Account?</div>
-          <Button fullWidth variant="contained" color="error">
+          <Button
+            fullWidth
+            variant="contained"
+            color="error"
+            component={Link}
+            to="/register"
+          >
             Sign Up
           </Button>
         </form>
