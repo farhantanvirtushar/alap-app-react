@@ -39,6 +39,11 @@
   margin-bottom: 10px;
 }
 
+.text-row {
+  margin: 10px;
+  font-size: 0.9rem;
+  color: var(--primary-color);
+}
 .error {
   color: rgb(255, 0, 0);
   font-family: sans-serif;

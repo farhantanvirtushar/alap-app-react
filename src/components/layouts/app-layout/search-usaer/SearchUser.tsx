@@ -37,7 +37,7 @@ export default function SearchUser() {
     <div className="search-bar">
       <input
         type="text"
-        className="search-input"
+        id="search-input"
         placeholder="Search People"
         value={searchedUser}
         onChange={(event) => {

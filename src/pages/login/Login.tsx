@@ -60,7 +60,7 @@ export default function Login() {
               fullWidth
               label="email"
               variant="outlined"
-              {...register("email", { required: "username is required" })}
+              {...register("email", { required: "email is required" })}
             />
           </div>
 
@@ -87,6 +87,10 @@ export default function Login() {
               Sign In
             </Button>
           )}
+          <div className="text-row">Don't Have An Account?</div>
+          <Button fullWidth variant="contained" color="error">
+            Sign Up
+          </Button>
         </form>
       </div>
     </div>

@@ -18,7 +18,7 @@
   justify-content: space-between;
 }
 
-input[type="text"] {
+#message-input {
   width: 100%;
   max-width: 1600px;
   padding: 12px 20px;
@@ -29,6 +29,6 @@ input[type="text"] {
   border-radius: 15px;
 }
 
-input[type="text"]:focus {
+#message-input:focus {
   outline: none;
 }
