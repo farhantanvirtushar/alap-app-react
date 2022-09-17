@@ -8,7 +8,9 @@ import { io } from "socket.io-client";
 import { getUserId } from "./common/Utils";
 import { Message } from "./models/message/Message";
 import { useStore } from "react-redux";
-const socket = io("http://localhost:5000");
+
+const socketUrl = process.env.REACT_APP_BACKEND_API!;
+const socket = io(socketUrl);
 
 function App() {
   const [isConnected, setIsConnected] = useState<boolean>(false);
